@@ -26,8 +26,9 @@ void setup() {
   // put your setup code here, to run once:
   pinMode(push_button, INPUT);
   Serial.begin(9600);                             // for debugging
+  Serial.begin(9600);
   delay(500); // wait for console opening
-
+  Serial3.begin(9600);
   Wire.begin();
   delay(500);
   
@@ -103,13 +104,21 @@ void loop() {
       Serial.print(':');
       Serial.print(now.second(), DEC);
       Serial.println();
-  
-      Serial.print(" since midnight 1/1/1970 = ");
-      Serial.print(now.unixtime());
-      Serial.print("s = ");
-      Serial.print(now.unixtime() / 86400L);
-      Serial.println("d");
       
+      Serial3.print(id);
+      Serial3.print(" ");
+      Serial3.print(now.year(), DEC);
+      Serial3.print('/');
+      Serial3.print(now.month(), DEC);
+      Serial3.print('/');
+      Serial3.print(now.day(), DEC);
+      Serial3.print(" ");
+      Serial3.print(now.hour(), DEC);
+      Serial3.print(':');
+      Serial3.print(now.minute(), DEC);
+      Serial3.print(':');
+      Serial3.print(now.second(), DEC);
+      Serial3.print(" ");
     }
     delay(50);            //don't ned to run this at full speed
   }
