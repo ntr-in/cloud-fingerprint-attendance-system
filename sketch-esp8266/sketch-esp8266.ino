@@ -1,13 +1,14 @@
 #include "ThingSpeak.h"
 #include <ESP8266WiFi.h>
+#include <ESP8266HTTPClient.h>
 
 char ssid[] = "bakul";   // your network SSID (name) 
 char pass[] = "bakulbakul";   // your network password
 int keyIndex = 0;            // your network key Index number (needed only for WEP)
 WiFiClient  client;
 
-unsigned long myChannelNumber = 877894;
-const char * myWriteAPIKey = "VU0348WOREPGPX9A";
+unsigned long myChannelNumber = 889971;// 877894;
+const char * myWriteAPIKey = "8U00D081JDQL3H77"; //"VU0348WOREPGPX9A";
 
 void setup() {
   Serial.begin(9600);  // Initialize serial
@@ -33,10 +34,12 @@ void loop() {
   if (Serial.available()) {
 
     // set the fields with the values
-    ThingSpeak.setField(1, Serial.readStringUntil('\n'));
-    ThingSpeak.setField(2, Serial.readStringUntil('\n'));
-    ThingSpeak.setField(3, Serial.readStringUntil('\n'));
-    ThingSpeak.setField(4, Serial.readStringUntil('\n'));
+    String name=Serial.readStringUntil(' ');
+    String date=Serial.readStringUntil(' ');
+    String t=Serial.readStringUntil(' ');
+    ThingSpeak.setField(1, name);
+    ThingSpeak.setField(2, date);
+    ThingSpeak.setField(3, t);
     
     // write to the ThingSpeak channel
     int x = ThingSpeak.writeFields(myChannelNumber, myWriteAPIKey);
@@ -46,6 +49,12 @@ void loop() {
     else{
       Serial.println("Problem updating channel. HTTP error code " + String(x));
     }
+
+    HTTPClient http;
+    http.begin("https://maker.ifttt.com/trigger/student_entered/with/key/eMAeXhzPzrp6FuNewWHNaJSYsGOTdW4DBAJPbcyoF50?value1=\""+name+"&value2=\""+date+"&value3=\""+t);
+    http.GET();
+    http.end();
+    
     
   }
   
